@@ -1,13 +1,13 @@
 class Cell
     attr_reader :alive
 
-    def initialize(alive=true)
+    def initialize(alive)
         @alive = alive
     end
 
     def to_s
-        print "1" if alive?
-        print "0" if !alive?
+        return "1" if alive?
+        return "0" if !alive?
     end
 
     def alive?
