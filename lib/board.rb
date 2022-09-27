@@ -1,12 +1,33 @@
 require_relative "cell.rb"
 
 class Board
-    attr_reader :width, :height, :grid
-    def initialize(width, height, grid=nil)
+    attr_reader :width, :height, :grid, :file
+    def initialize(width=20, height=20, file=nil)
         @width, @height = width, height
-        @grid = Array.new(width) { Array.new(height) { Cell.new(random_state) } }
+
+        if file
+            @file = file
+            new_grid = text_to_array(file)
+            @width = new_grid.length
+            @height = new_grid[0].length
+            @grid = Array.new(@width) { Array.new(@height) { Cell.new(random_state) } }
+            array_to_grid(new_grid)
+        else
+            @grid = Array.new(width) { Array.new(height) { Cell.new(random_state) } }
+        end
+    end
+
+    # Converts file into grid
+    def text_to_array(file)
+        new_arr = File.readlines(file).map(&:chomp)
+        new_grid = []
+        new_arr.each do |str|
+            set = Array.new
+            str.each_char { |char| set << char.to_i }
+            new_grid << set
+        end
         
-        array_to_grid(grid) if grid
+        new_grid
     end
 
     # Randomizes the state of a cell
@@ -38,8 +59,10 @@ class Board
     end
 
     def next_board_state
+        init_state = self.dup_board
+        # init_state.render
         board_positions.each do |pos|
-            cell_state(pos)
+            cell_state(pos, init_state)
         end
     end
 
@@ -53,11 +76,11 @@ class Board
         all_positions
     end
 
-    def cell_state(cell_pos)
+    def cell_state(cell_pos, init_state)
         neighbors = neighbors(cell_pos)
-        living_cells = living_cells(neighbors)
+        living_cells = living_cells(neighbors, init_state)
 
-        alive = self.alive?(self[cell_pos])
+        alive = self.alive?(init_state[cell_pos])
  
         case alive
         when alive = true
@@ -65,8 +88,11 @@ class Board
                 self[cell_pos].switch_state
             end
         when alive = false
+            # p "Cell #{cell_pos} has #{living_cells} around it"
+            
             if living_cells == 3
                 self[cell_pos].switch_state
+                # p "Cell #{cell_pos} is switching_states"
             end
         end
 
@@ -76,9 +102,9 @@ class Board
         cell.alive?
     end
 
-    def living_cells(neighbors)
+    def living_cells(neighbors, init_state)
         living_cells = 0
-        board_dup = dup_board
+        board_dup = self.dup_board
 
         neighbors.each do |neighbor|
             next if !self.alive?(board_dup[neighbor])
@@ -121,8 +147,9 @@ class Board
     end
 
     def array_to_grid(arr)
-        raise "Array has wrong width or height" if arr.length != height || arr[0].length != width
-
+        
+        raise "Array has wrong width or height" if arr.length != width || arr[0].length != height
+        
         arr.each.with_index do |row, i|
             row.each.with_index do |cell, j| 
                 if cell == 1
@@ -135,9 +162,8 @@ class Board
     end
 
     def dup_board
-        board_dup = self.dup
-        board_dup
+        board_dup = Board.new(width, height, file)
+        # board_dup.render
     end
 end
-
 
