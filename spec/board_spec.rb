@@ -28,8 +28,10 @@ describe Board do
                 [0,1,1],
                 [0,0,0]
             ]
+            
+            let(:reviving_board) { Board.new(3, 3, reviving_cells) }
             it "should revive those cells" do
-                expect(Board.new(3, 3, reviving_cells)).to eq(
+                expect(reviving_board.board_array).to eq(
                     [ 
                         [0,1,1],
                         [0,1,1],
