@@ -39,9 +39,9 @@ class Board
 
     # Renders the board
     def render
-        # puts "-" * width
-        # puts "THE GAME OF LIFE"
-        # puts "-" * width
+        puts "-" * width * 2
+        puts "  " + "THE GAME OF LIFE"
+        puts "-" * width * 2
 
         grid.each do |row| 
             puts row.map(&:to_s).join(" ")
@@ -88,11 +88,9 @@ class Board
                 self[cell_pos].switch_state
             end
         when alive = false
-            # p "Cell #{cell_pos} has #{living_cells} around it"
             
             if living_cells == 3
                 self[cell_pos].switch_state
-                # p "Cell #{cell_pos} is switching_states"
             end
         end
 
@@ -163,7 +161,6 @@ class Board
 
     def dup_board
         board_dup = Board.new(width, height, file)
-        # board_dup.render
     end
 end
 
