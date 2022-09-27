@@ -6,8 +6,8 @@ class Cell
     end
 
     def to_s
-        return "1" if alive?
-        return "0" if !alive?
+        return "*" if alive?
+        return " " if !alive?
     end
 
     def alive?

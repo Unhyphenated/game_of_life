@@ -2,13 +2,11 @@ require_relative "cell.rb"
 
 class Board
     attr_reader :width, :height, :grid
-    def initialize(width=3, height=3, grid=nil)
+    def initialize(width, height, grid=nil)
         @width, @height = width, height
         @grid = Array.new(width) { Array.new(height) { Cell.new(random_state) } }
         
         array_to_grid(grid) if grid
-        render
-        next_board_state
     end
 
     # Randomizes the state of a cell
@@ -20,9 +18,9 @@ class Board
 
     # Renders the board
     def render
-        puts "-" * width
-        puts "THE GAME OF LIFE"
-        puts "-" * width
+        # puts "-" * width
+        # puts "THE GAME OF LIFE"
+        # puts "-" * width
 
         grid.each do |row| 
             puts row.map(&:to_s).join(" ")
@@ -43,8 +41,6 @@ class Board
         board_positions.each do |pos|
             cell_state(pos)
         end
-
-        self.render
     end
 
     def board_positions
