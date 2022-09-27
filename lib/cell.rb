@@ -14,4 +14,7 @@ class Cell
         @alive
     end
 
+    def switch_state
+        @alive = !@alive
+    end
 end
