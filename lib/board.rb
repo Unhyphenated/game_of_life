@@ -2,10 +2,11 @@ require_relative "cell.rb"
 
 class Board
     attr_reader :width, :height, :grid
-    def initialize(width=3, height=3)
+    def initialize(width=3, height=3, grid=nil)
         @width, @height = width, height
         @grid = Array.new(width) { Array.new(height) { Cell.new(random_state) } }
         
+        array_to_grid(grid) if grid
         render
         next_board_state
     end
@@ -81,9 +82,10 @@ class Board
 
     def living_cells(neighbors)
         living_cells = 0
+        board_dup = dup_board
 
         neighbors.each do |neighbor|
-            next if !self.alive?(self[neighbor])
+            next if !self.alive?(board_dup[neighbor])
             living_cells += 1
         end
 
@@ -123,7 +125,17 @@ class Board
     end
 
     def array_to_grid(arr)
-        
+        raise "Array has wrong width or height" if arr.length != height || arr[0].length != width
+
+        arr.each.with_index do |row, i|
+            row.each.with_index do |cell, j| 
+                if cell == 1
+                    self[[i, j]] = Cell.new(true)
+                else
+                    self[[i, j]] = Cell.new(false)
+                end
+            end
+        end
     end
 
     def dup_board
@@ -132,4 +144,4 @@ class Board
     end
 end
 
-b = Board.new
+
