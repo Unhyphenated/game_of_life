@@ -143,7 +143,6 @@ class Board
     end
 
     def array_to_grid(arr)
-        
         raise "Array has wrong width or height" if arr.length != width || arr[0].length != height
         
         arr.each.with_index do |row, i|
