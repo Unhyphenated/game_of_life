@@ -60,7 +60,6 @@ class Board
 
     def next_board_state
         init_state = self.dup_board
-        # init_state.render
         board_positions.each do |pos|
             cell_state(pos, init_state)
         end
@@ -93,7 +92,6 @@ class Board
                 self[cell_pos].switch_state
             end
         end
-
     end
 
     def alive?(cell)
